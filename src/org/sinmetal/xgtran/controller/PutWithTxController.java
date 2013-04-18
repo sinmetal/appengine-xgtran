@@ -22,7 +22,9 @@ public class PutWithTxController extends Controller {
 		// 普通のTx
 		Transaction tx = Datastore.beginTransaction();
 		try {
-			Datastore.put(tx, entity);
+			Key storedKey = Datastore.put(tx, entity);
+			response.getWriter().println(
+					String.format("stored key = %s", storedKey.getName()));
 			tx.commit();
 		} finally {
 			if (tx != null && tx.isActive()) {

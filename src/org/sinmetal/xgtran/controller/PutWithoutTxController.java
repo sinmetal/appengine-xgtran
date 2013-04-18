@@ -17,7 +17,10 @@ public class PutWithoutTxController extends Controller {
 
 		Key key = KeyFactory.createKey(kind, name);
 		Entity entity = new Entity(key);
-		Datastore.putWithoutTx(entity);
+
+		Key storedKey = Datastore.putWithoutTx(entity);
+		response.getWriter().write(
+				String.format("Key = %s", storedKey.getName()));
 		return null;
 	}
 
