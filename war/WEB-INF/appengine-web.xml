@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <appengine-web-app xmlns="http://appengine.google.com/ns/1.0">
 	<application>sin4sandbox</application>
-	<version>2013-0418-0028</version>
+	<version>2013-0418-1050</version>
 	
 	<precompilation-enabled>true</precompilation-enabled>
 	
