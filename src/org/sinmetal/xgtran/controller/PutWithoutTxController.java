@@ -12,7 +12,10 @@ public class PutWithoutTxController extends Controller {
 
 	@Override
 	protected Navigation run() throws Exception {
-		Key key = KeyFactory.createKey("Hoge", asString("hoge"));
+		final String kind = asString("kind");
+		final String name = asString("name");
+
+		Key key = KeyFactory.createKey(kind, name);
 		Entity entity = new Entity(key);
 		Datastore.putWithoutTx(entity);
 		return null;

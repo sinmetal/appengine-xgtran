@@ -6,16 +6,25 @@ import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.KeyFactory;
+import com.google.appengine.api.datastore.Transaction;
 
-public class GetWithoutTxController extends Controller {
+public class GetWithTxController extends Controller {
 
 	@Override
 	protected Navigation run() throws Exception {
 		final String kind = asString("kind");
 		final String name = asString("name");
 
-		Entity entity = Datastore.getOrNullWithoutTx(KeyFactory.createKey(kind,
-				name));
+		Transaction tx = Datastore.beginTransaction();
+		Entity entity = null;
+		try {
+			entity = Datastore.getOrNull(tx, KeyFactory.createKey(kind, name));
+			tx.commit();
+		} finally {
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+		}
 
 		if (entity == null) {
 			response.getWriter().println(
@@ -28,4 +37,5 @@ public class GetWithoutTxController extends Controller {
 		}
 		return null;
 	}
+
 }

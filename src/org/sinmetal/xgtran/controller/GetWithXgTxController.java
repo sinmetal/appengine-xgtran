@@ -14,14 +14,15 @@ public class GetWithXgTxController extends Controller {
 
 	@Override
 	protected Navigation run() throws Exception {
+		final String kind = asString("kind");
+		final String name = asString("name");
+
 		Transaction tx = DatastoreServiceFactory.getDatastoreService()
 				.beginTransaction(TransactionOptions.Builder.withXG(true));
 
-		final String hoge = asString("hoge");
 		Entity entity = null;
 		try {
-			entity = Datastore
-					.getOrNull(tx, KeyFactory.createKey("Hoge", hoge));
+			entity = Datastore.getOrNull(tx, KeyFactory.createKey(kind, name));
 			tx.commit();
 		} finally {
 			if (tx != null && tx.isActive()) {
@@ -31,10 +32,12 @@ public class GetWithXgTxController extends Controller {
 
 		if (entity == null) {
 			response.getWriter().println(
-					String.format("DONE : Key = %s is null", hoge));
+					String.format("DONE : Kind = %s, Key = %s is null", kind,
+							name));
 		} else {
 			response.getWriter().println(
-					String.format("DONE : Key = %s exist. ", hoge));
+					String.format("DONE : Kind = %s, Key = %s exist. ", kind,
+							name));
 		}
 		return null;
 	}

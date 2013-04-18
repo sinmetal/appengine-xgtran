@@ -13,7 +13,10 @@ public class PutWithTxController extends Controller {
 
 	@Override
 	protected Navigation run() throws Exception {
-		Key key = KeyFactory.createKey("Hoge", asString("hoge"));
+		final String kind = asString("kind");
+		final String name = asString("name");
+
+		Key key = KeyFactory.createKey(kind, name);
 		Entity entity = new Entity(key);
 
 		// 普通のTx
@@ -24,9 +27,11 @@ public class PutWithTxController extends Controller {
 		} finally {
 			if (tx != null && tx.isActive()) {
 				tx.rollback();
+				response.getWriter().println("rollback.");
 			}
 		}
-		response.getWriter().println("DONE");
+		response.getWriter().println(
+				String.format("DONE Kind = %s, Key = %s", kind, name));
 		return null;
 	}
 

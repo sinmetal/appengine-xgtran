@@ -13,35 +13,30 @@ import com.google.appengine.api.datastore.TransactionOptions;
 
 public class IndexController extends Controller {
 
-    @Override
-    protected Navigation run() throws Exception {
-        Transaction tx =
-            DatastoreServiceFactory.getDatastoreService().beginTransaction(
-                TransactionOptions.Builder.withXG(true));
-        try {
-            Datastore.getOrNull(
-                tx,
-                KeyFactory.createKey("Hoge", asString("hoge")));
-            Datastore.getOrNull(
-                tx,
-                KeyFactory.createKey("Fuga", asString("fuga")));
-            Datastore.getOrNull(
-                tx,
-                KeyFactory.createKey("Moga", asString("moga")));
+	@Override
+	protected Navigation run() throws Exception {
+		Transaction tx = DatastoreServiceFactory.getDatastoreService()
+				.beginTransaction(TransactionOptions.Builder.withXG(true));
+		try {
+			Datastore.getOrNull(tx,
+					KeyFactory.createKey("Hoge", asString("hoge")));
+			Datastore.getOrNull(tx,
+					KeyFactory.createKey("Fuga", asString("fuga")));
+			Datastore.getOrNull(tx,
+					KeyFactory.createKey("Moga", asString("moga")));
 
-            Key logKey = KeyFactory.createKey("HogeLog", asString("log"));
-            Entity logEntity = new Entity(logKey);
-            Datastore.put(tx, logEntity);
+			Key logKey = KeyFactory.createKey("HogeLog", asString("log"));
+			Entity logEntity = new Entity(logKey);
+			Datastore.put(tx, logEntity);
 
-            tx.commit();
-        } finally {
-            if (tx != null && tx.isActive()) {
-                tx.rollback();
-            }
-        }
+			tx.commit();
+		} finally {
+			if (tx != null && tx.isActive()) {
+				tx.rollback();
+			}
+		}
 
-        response.getWriter().write("DONE");
-        return null;
-    }
-
+		response.getWriter().write("DONE");
+		return null;
+	}
 }
